@@ -84,7 +84,7 @@ You can evaluate the model during training, as the script outputs both training 
 
 The custom model uses the **DeepLabV3+** architecture with a ResNet-34 encoder. Additionally, **CBAM (Convolutional Block Attention Module)** is added at three different layers to enhance the spatial and channel-wise attention for better segmentation results.
 
-![Model Architecture](path_to_architecture_image.png)
+% ![Model Architecture]
 
 ## Files Overview
 
