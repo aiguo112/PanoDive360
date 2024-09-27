@@ -1,5 +1,5 @@
 
-# Custom DeepLabV3+ with CBAM for Semantic Segmentation
+# PanoDive360: A Novel ERP Dataset and Enhanced Attention Mechanism for Underwater 360° Multiclass Semantic Segmentation
 
 This repository contains an implementation of a custom semantic segmentation model based on **DeepLabV3+** with **Convolutional Block Attention Module (CBAM)**. The model is built using PyTorch and uses CBAM blocks to improve feature representation in the segmentation process. The dataset used is expected to have RGB images and corresponding labeled masks with multiple classes.
 
