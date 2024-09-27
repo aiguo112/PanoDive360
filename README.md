@@ -30,8 +30,8 @@ To set up the project, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/custom-deeplabv3plus-cbam.git
-   cd custom-deeplabv3plus-cbam
+   https://github.com/aiguo112/PanoDive360.git
+   cd PanoDive360
    ```
 
 2. Install the required dependencies using `pip`:
