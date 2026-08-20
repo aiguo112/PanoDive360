@@ -30,7 +30,7 @@ To set up the project, follow these steps:
 
 1. Clone the repository:
    ```bash
-   https://github.com/aiguo112/PanoDive360.git
+  Git Clone 
    cd PanoDive360
    ```
 
