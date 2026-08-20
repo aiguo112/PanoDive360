@@ -41,7 +41,7 @@ def train_model(model, train_loader, valid_loader, criterion, optimizer, num_epo
     epochs_no_improve = 0
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=patience, verbose=True)
 
-    log_dir = os.path.join(r'/home/arbi/PycharmProjects/Data_Prep_Pano/runs', model_name)
+    log_dir = os.path.join(os.environ.get('PANODIVE360_RUNS', 'runs'), model_name)
     writer = SummaryWriter(log_dir=log_dir)
 
     for epoch in range(num_epochs):

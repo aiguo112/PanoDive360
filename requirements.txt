@@ -1,14 +1,8 @@
-requirements_content = """
 albumentations==1.4.14
 Pillow==9.3.0
 torch==1.10.1
 torchvision==0.11.2
 segmentation-models-pytorch==0.3.3
 tqdm==4.62.3
-"""
-
-# Save to a requirements.txt file
-with open('requirements.txt', 'w') as f:
-    f.write(requirements_content.strip())
-
-print("requirements.txt created successfully!")
+numpy
+tensorboard

@@ -1,103 +1,96 @@
+# PanoDive360
 
-# PanoDive360: A Novel ERP Dataset and Enhanced Attention Mechanism for Underwater 360° Multiclass Semantic Segmentation
+Equirectangular (ERP) dataset and CNN benchmark for **underwater 360-degree multiclass semantic segmentation**.
 
-This repository contains an implementation of a custom semantic segmentation model based on **DeepLabV3+** with **Convolutional Block Attention Module (CBAM)**. The model is built using PyTorch and uses CBAM blocks to improve feature representation in the segmentation process. The dataset used is expected to have RGB images and corresponding labeled masks with multiple classes.
+Almost all marine segmentation datasets assume a narrow-field pinhole camera. ERP 360-degree imagery removes blind spots, but it stretches objects near the poles, wraps instances across the image seam, and mixes low-visibility water with cluttered fauna. PanoDive360 is a pixel-annotated underwater ERP set and a first CNN baseline on that set.
 
-## Table of Contents
+This repository is the **code release** (preprocessing helpers + training scripts). The image/mask archive is not stored here.
 
-- [Features](#features)
-- [Installation](#installation)
-- [Dataset Structure](#dataset-structure)
-- [Usage](#usage)
-  - [Training the Model](#training-the-model)
-  - [Evaluating the Model](#evaluating-the-model)
-- [Model Architecture](#model-architecture)
-- [Files Overview](#files-overview)
-- [License](#license)
+## Dataset (main contribution)
 
-## Features
+| Item | Value |
+| --- | --- |
+| Frames | 1,052 stills from 30 publicly shared 4K 360-degree videos |
+| Projection | Monoscopic ERP, 2:1 aspect, pixel labels on the ERP image |
+| Classes | 11 (10 foreground + background water) |
+| Source | Publicly shared platforms such as YouTube (not public-domain by default) |
+| Prep | Audio stripped; side-by-side / over-under converted to mono ERP; stills extracted with FFmpeg |
 
-- **Custom DeepLabV3+ Model**: Implements DeepLabV3+ with a ResNet-34 backbone and pretrained ImageNet weights.
-- **CBAM (Convolutional Block Attention Module)**: Attention mechanism to improve feature extraction at different layers.
-- **Multi-class segmentation**: Designed for semantic segmentation with 11 different classes, including the background.
-- **TensorBoard support**: Visualize training progress and metrics using TensorBoard.
-- **Early stopping**: Implements early stopping when the validation loss stops improving.
-- **Custom Dice Loss**: Combines Dice Loss and Cross-Entropy Loss for better performance on imbalanced datasets.
+Foreground classes, frame counts, and mask RGB colors:
 
-## Installation
+| Class | Frames | % of 1,052 | RGB |
+| --- | ---: | ---: | --- |
+| Diver | 1010 | 96.0 | (167, 242, 82) |
+| Shark | 310 | 29.5 | (166, 3, 3) |
+| Fish | 267 | 25.4 | (255, 237, 29) |
+| Sea turtle | 41 | 3.9 | (255, 0, 243) |
+| Dolphin | 27 | 2.6 | (30, 95, 170) |
+| Sea lion | 68 | 6.5 | (169, 205, 248) |
+| Coral | 96 | 9.1 | (106, 37, 163) |
+| Shipwreck | 275 | 26.1 | (115, 76, 20) |
+| Seaweed | 323 | 30.7 | (233, 180, 245) |
+| Rock | 272 | 25.9 | (245, 94, 94) |
+| Background | 1052 | 100 | (0, 0, 0) |
 
-To set up the project, follow these steps:
+Diver is present in almost every frame; dolphin and sea turtle are rare. The set is strongly imbalanced. Source URLs, platform terms of use, and a labeling codebook are intended to ship with the public image package.
 
-1. Clone the repository:
-   ```bash
-  Git Clone 
-   cd PanoDive360
-   ```
+## CNN benchmark (diagnostic, not a SOTA claim)
 
-2. Install the required dependencies using `pip`:
-   ```bash
-   pip install -r requirements.txt
-   ```
+Shared-protocol CNNs in the paper: U-Net, U-Net++, PSPNet, DeepLabv3+, and ERP-CBAM (DeepLabv3+ / ResNet-34 with a latitude-weighted spatial attention block).
 
-3. Ensure that you have a CUDA-compatible GPU and PyTorch installed. You can install PyTorch by following the instructions [here](https://pytorch.org/get-started/locally/).
+Relative to DeepLabv3+, ERP-CBAM raises mean IoU (0.536 → 0.606), recall (0.680 → 0.758), F1, Dice, and balanced accuracy. It is **not** best among these five CNNs on accuracy, precision, or MCC. Treat ERP-CBAM as a diagnostic baseline rather than a generally superior architecture.
 
-## Dataset Structure
+Ablation in the paper: removing the latitude term can raise mIoU while the full ERP-CBAM setting is stronger on recall / balanced accuracy. That is a trade-off, not a uniform win.
 
-The dataset should be structured as follows:
+## Layout expected by the training script
 
 ```text
 data_split/
-│
-├── train/
-│   ├── images/
-│   └── masks/
-├── valid/
-│   ├── images/
-│   └── masks/
+  train/
+    images/     # e.g. image_001.jpg
+    masks/      # e.g. mask_001.png (RGB labels, same stem)
+  valid/
+    images/
+    masks/
 ```
 
-- **images/**: Directory containing RGB images.
-- **masks/**: Corresponding masks with labels for each class (as per the color mapping).
+Set the data root with `PANODIVE360_DATA` or edit `config.py`. Checkpoints and TensorBoard logs go to `runs/` (or `PANODIVE360_RUNS`).
 
-Make sure the masks are PNG files with the same filename as the images, following this naming convention:
-- Images: `image_001.jpg`
-- Masks: `mask_001.png`
+## Setup
 
-## Usage
+```bash
+pip install -r requirements.txt
+```
 
-### Training the Model
+Install a CUDA build of PyTorch that matches your GPU from the [PyTorch install page](https://pytorch.org/get-started/locally/). Then:
 
-1. Ensure that the dataset is properly structured as mentioned above.
-2. You can configure any hyperparameters and file paths in the `config.py` file.
-3. To train the model, run the following command:
-   ```bash
-   python main.py
-   ```
+```bash
+python main.py
+```
 
-The model checkpoints and TensorBoard logs will be saved in the `runs/` directory.
+`main.py` trains the ERP-CBAM DeepLabv3+ variant (`csutom_model.py`). Vanilla CBAM DeepLabv3+ is in `model.py`.
 
-### Evaluating the Model
+Helpers:
 
-You can evaluate the model during training, as the script outputs both training and validation metrics for each epoch. If you wish to load a specific model checkpoint for inference, you can use the `load_checkpoint` function provided in `train.py`.
+- `stereo_to_mono_converter.py` — dual-channel 360 layouts to monoscopic ERP
+- `VideoFrameExtractor.py` — FFmpeg still extraction
+- `ImageResizer.py` — optional 2:1 resize (default example 1664×832)
 
-## Model Architecture
+## Files
 
-The custom model uses the **DeepLabV3+** architecture with a ResNet-34 encoder. Additionally, **CBAM (Convolutional Block Attention Module)** is added at three different layers to enhance the spatial and channel-wise attention for better segmentation results.
-
-Need to upload the image yet. 
-
-## Files Overview
-
-- **config.py**: Contains paths and parameters like input image size, number of classes, and the dataset directory.
-- **utils.py**: Helper functions for converting between RGB masks and one-hot encoded masks.
-- **dataset.py**: `SegmentationDataset` class and DataLoader setup.
-- **losses.py**: Defines custom loss functions, including Dice Loss and a combined loss.
-- **cbam.py**: Implements the CBAM block used in the custom DeepLabV3+ model.
-- **model.py**: Defines the custom DeepLabV3+ model with CBAM.
-- **train.py**: Contains the training loop, model evaluation, and checkpoint saving.
-- **main.py**: Entry point for training the model.
-- **requirements.txt**: Lists the necessary dependencies for the project.
+| File | Role |
+| --- | --- |
+| `config.py` | Paths, 11-class RGB map, input size |
+| `dataset.py` | `SegmentationDataset` and loaders |
+| `utils.py` | RGB mask ↔ one-hot |
+| `losses.py` | Dice + cross-entropy |
+| `cbam.py` | Standard CBAM |
+| `erp_cbam.py` | Latitude-weighted spatial attention |
+| `model.py` | DeepLabv3+ + CBAM |
+| `csutom_model.py` | DeepLabv3+ + ERP-CBAM (used by `main.py`) |
+| `train.py` | Train / val loop, checkpoints, TensorBoard |
+| `main.py` | Entry point |
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+Code: MIT (see `LICENSE`). Dataset media remain under their original platform terms; this repo does not redistribute the videos.
