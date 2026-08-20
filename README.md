@@ -8,7 +8,7 @@ Equirectangular (ERP) dataset and CNN benchmark for **underwater 360-degree mult
 
 Almost all marine segmentation datasets assume a narrow-field pinhole camera. ERP 360-degree imagery removes blind spots, but it stretches objects near the poles, wraps instances across the image seam, and mixes low-visibility water with cluttered fauna. PanoDive360 is a pixel-annotated underwater ERP set and a first CNN baseline on that set.
 
-This repository is the **code release**. Put images and masks under `data/splits/` (see [data/README.md](data/README.md)); they are not stored in git.
+This repository is the **code release** plus a small labeled example set. The full 1,052-frame archive is not in git. Six RGB stills and matching masks are in [`data/examples/`](data/examples/). Put the full split under `data/splits/` (see [data/README.md](data/README.md)).
 
 ## Repository layout
 
@@ -22,7 +22,8 @@ PanoDive360/
 │   ├── data/                # Dataset class (not the image files)
 │   └── models/              # CBAM, ERP-CBAM, DeepLabv3+ variants
 ├── preprocess/              # FFmpeg helpers (stereo→mono, frames, resize)
-├── data/                    # dataset root (empty placeholders in git)
+├── data/
+│   ├── examples/{images,masks}/   # 6 labeled sample frames (in git)
 │   ├── raw/
 │   └── splits/{train,valid,test}/{images,masks}/
 ├── assets/                  # README figures

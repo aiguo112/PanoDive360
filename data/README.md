@@ -1,10 +1,13 @@
 # Dataset layout
 
-PanoDive360 labels 1,052 monoscopic ERP stills into 11 classes (10 foreground + background water). **Images and masks are not stored in this git repo.** Place your local copy here, or set `PANODIVE360_DATA` to another root with the same layout.
+PanoDive360 labels 1,052 monoscopic ERP stills into 11 classes (10 foreground + background water). The **full image/mask archive is not in git**. A small labeled subset is in [`examples/`](examples/).
 
 ```text
 data/
-  raw/                         # optional: source 360 videos
+  examples/                    # 6 RGB stills + matching masks (in this repo)
+    images/
+    masks/
+  raw/                         # optional: source 360 videos (not in git)
   splits/
     train/
       images/                  # RGB stills, e.g. image_001.jpg or initial_360-ERP_417.jpg

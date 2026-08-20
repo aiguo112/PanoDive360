@@ -18,5 +18,6 @@ data/splits/**/*.JPG
 data/splits/**/*.PNG
 data/raw/**
 !data/**/.gitkeep
+!data/examples/**
 .DS_Store
 Thumbs.db
