@@ -1,5 +1,9 @@
 # PanoDive360
 
+![PanoDive360 teaser: RGB equirectangular frame, ground-truth mask, and overlay](assets/teaser.jpg)
+
+*Example ERP still (frame 417) with pixel labels for diver and shipwreck. The dataset has 11 classes in total.*
+
 Equirectangular (ERP) dataset and CNN benchmark for **underwater 360-degree multiclass semantic segmentation**.
 
 Almost all marine segmentation datasets assume a narrow-field pinhole camera. ERP 360-degree imagery removes blind spots, but it stretches objects near the poles, wraps instances across the image seam, and mixes low-visibility water with cluttered fauna. PanoDive360 is a pixel-annotated underwater ERP set and a first CNN baseline on that set.
