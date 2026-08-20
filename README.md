@@ -1,8 +1,8 @@
 # PanoDive360
 
-![PanoDive360 teaser: RGB equirectangular frame, ground-truth mask, and overlay](assets/teaser.jpg)
+![PanoDive360 teaser](assets/360-ERP_417.jpg)
 
-*Example ERP still (frame 417) with pixel labels for diver and shipwreck. The dataset has 11 classes in total.*
+*Equirectangular underwater still `360-ERP_417.jpg` (diver and shipwreck). The dataset has 11 classes in total.*
 
 Equirectangular (ERP) dataset and CNN benchmark for **underwater 360-degree multiclass semantic segmentation**.
 
@@ -26,7 +26,7 @@ PanoDive360/
 │   ├── examples/{images,masks}/   # 6 labeled sample frames (in git)
 │   ├── raw/
 │   └── splits/{train,valid,test}/{images,masks}/
-├── assets/                  # README figures
+├── assets/360-ERP_417.jpg   # README teaser
 └── docs/diagrams/           # architecture diagram scripts
 ```
 
