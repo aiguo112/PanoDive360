@@ -8,7 +8,26 @@ Equirectangular (ERP) dataset and CNN benchmark for **underwater 360-degree mult
 
 Almost all marine segmentation datasets assume a narrow-field pinhole camera. ERP 360-degree imagery removes blind spots, but it stretches objects near the poles, wraps instances across the image seam, and mixes low-visibility water with cluttered fauna. PanoDive360 is a pixel-annotated underwater ERP set and a first CNN baseline on that set.
 
-This repository is the **code release** (preprocessing helpers + training scripts). The image/mask archive is not stored here.
+This repository is the **code release**. Put images and masks under `data/splits/` (see [data/README.md](data/README.md)); they are not stored in git.
+
+## Repository layout
+
+```text
+PanoDive360/
+├── train.py                 # training entry point
+├── panodive360/             # models, loaders, losses, config
+│   ├── config.py
+│   ├── losses.py
+│   ├── trainer.py
+│   ├── data/                # Dataset class (not the image files)
+│   └── models/              # CBAM, ERP-CBAM, DeepLabv3+ variants
+├── preprocess/              # FFmpeg helpers (stereo→mono, frames, resize)
+├── data/                    # dataset root (empty placeholders in git)
+│   ├── raw/
+│   └── splits/{train,valid,test}/{images,masks}/
+├── assets/                  # README figures
+└── docs/diagrams/           # architecture diagram scripts
+```
 
 ## Dataset (main contribution)
 
@@ -20,23 +39,7 @@ This repository is the **code release** (preprocessing helpers + training script
 | Source | Publicly shared platforms such as YouTube (not public-domain by default) |
 | Prep | Audio stripped; side-by-side / over-under converted to mono ERP; stills extracted with FFmpeg |
 
-Foreground classes, frame counts, and mask RGB colors:
-
-| Class | Frames | % of 1,052 | RGB |
-| --- | ---: | ---: | --- |
-| Diver | 1010 | 96.0 | (167, 242, 82) |
-| Shark | 310 | 29.5 | (166, 3, 3) |
-| Fish | 267 | 25.4 | (255, 237, 29) |
-| Sea turtle | 41 | 3.9 | (255, 0, 243) |
-| Dolphin | 27 | 2.6 | (30, 95, 170) |
-| Sea lion | 68 | 6.5 | (169, 205, 248) |
-| Coral | 96 | 9.1 | (106, 37, 163) |
-| Shipwreck | 275 | 26.1 | (115, 76, 20) |
-| Seaweed | 323 | 30.7 | (233, 180, 245) |
-| Rock | 272 | 25.9 | (245, 94, 94) |
-| Background | 1052 | 100 | (0, 0, 0) |
-
-Diver is present in almost every frame; dolphin and sea turtle are rare. The set is strongly imbalanced. Source URLs, platform terms of use, and a labeling codebook are intended to ship with the public image package.
+Foreground class counts and RGB colors are listed in [data/README.md](data/README.md). Diver is present in almost every frame; dolphin and sea turtle are rare. The set is strongly imbalanced.
 
 ## CNN benchmark (diagnostic, not a SOTA claim)
 
@@ -46,54 +49,29 @@ Relative to DeepLabv3+, ERP-CBAM raises mean IoU (0.536 → 0.606), recall (0.68
 
 Ablation in the paper: removing the latitude term can raise mIoU while the full ERP-CBAM setting is stronger on recall / balanced accuracy. That is a trade-off, not a uniform win.
 
-## Layout expected by the training script
-
-```text
-data_split/
-  train/
-    images/     # e.g. image_001.jpg
-    masks/      # e.g. mask_001.png (RGB labels, same stem)
-  valid/
-    images/
-    masks/
-```
-
-Set the data root with `PANODIVE360_DATA` or edit `config.py`. Checkpoints and TensorBoard logs go to `runs/` (or `PANODIVE360_RUNS`).
-
 ## Setup
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Install a CUDA build of PyTorch that matches your GPU from the [PyTorch install page](https://pytorch.org/get-started/locally/). Then:
+Install a CUDA build of PyTorch that matches your GPU from the [PyTorch install page](https://pytorch.org/get-started/locally/). Copy the split into `data/splits/` (or set `PANODIVE360_DATA`). Then, from the repo root:
 
 ```bash
-python main.py
+python train.py
 ```
 
-`main.py` trains the ERP-CBAM DeepLabv3+ variant (`csutom_model.py`). Vanilla CBAM DeepLabv3+ is in `model.py`.
+`train.py` trains DeepLabv3+ with ERP-CBAM (`panodive360/models/deeplab_erp_cbam.py`). Vanilla CBAM DeepLabv3+ is `panodive360/models/deeplab_cbam.py`. Checkpoints and TensorBoard logs go to `runs/` (or `PANODIVE360_RUNS`).
 
-Helpers:
+Preprocessing helpers:
 
-- `stereo_to_mono_converter.py` — dual-channel 360 layouts to monoscopic ERP
-- `VideoFrameExtractor.py` — FFmpeg still extraction
-- `ImageResizer.py` — optional 2:1 resize (default example 1664×832)
+```bash
+python preprocess/stereo_to_mono.py
+python preprocess/extract_frames.py
+python preprocess/resize_images.py
+```
 
-## Files
-
-| File | Role |
-| --- | --- |
-| `config.py` | Paths, 11-class RGB map, input size |
-| `dataset.py` | `SegmentationDataset` and loaders |
-| `utils.py` | RGB mask ↔ one-hot |
-| `losses.py` | Dice + cross-entropy |
-| `cbam.py` | Standard CBAM |
-| `erp_cbam.py` | Latitude-weighted spatial attention |
-| `model.py` | DeepLabv3+ + CBAM |
-| `csutom_model.py` | DeepLabv3+ + ERP-CBAM (used by `main.py`) |
-| `train.py` | Train / val loop, checkpoints, TensorBoard |
-| `main.py` | Entry point |
+Edit the placeholder paths at the bottom of each script before running them.
 
 ## License
 

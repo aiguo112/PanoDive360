@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+
 class CBAM(nn.Module):
     def __init__(self, channels, reduction_ratio=16):
         super(CBAM, self).__init__()
@@ -17,11 +18,9 @@ class CBAM(nn.Module):
         )
 
     def forward(self, x):
-        # Channel attention
         ca = self.channel_attention(x)
         x = x * ca
 
-        # Spatial attention
         avg_out = torch.mean(x, dim=1, keepdim=True)
         max_out, _ = torch.max(x, dim=1, keepdim=True)
         sa = torch.cat([avg_out, max_out], dim=1)

@@ -7,8 +7,16 @@ venv/
 runs/
 *.pth
 *.pt
-data_split/
 *.mp4
 *.mkv
+*.avi
+*.webm
+data/splits/**/*.jpg
+data/splits/**/*.jpeg
+data/splits/**/*.png
+data/splits/**/*.JPG
+data/splits/**/*.PNG
+data/raw/**
+!data/**/.gitkeep
 .DS_Store
 Thumbs.db
