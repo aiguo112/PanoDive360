@@ -1,0 +1,6 @@
+seed,test_miou,pixel_accuracy,role
+42,0.6702,0.9597,main_and_robustness
+123,0.6342,0.9592,robustness
+777,0.6465,0.9578,robustness
+mean,0.6503,0.9589,summary
+std,0.0183,0.0010,summary

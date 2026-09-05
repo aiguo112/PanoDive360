@@ -1,0 +1,39 @@
+{
+  "paper": "PanoDive360: A Novel Equirectangular Projection Dataset and Enhanced Attention Mechanism for Underwater 360-Degree Multiclass Semantic Segmentation",
+  "venue": "ACM Multimedia Asia 2026",
+  "code": "https://github.com/aiguo112/PanoDive360",
+  "seeds": {
+    "main_table": 42,
+    "robustness": [42, 123, 777],
+    "generators": ["random", "numpy", "torch", "torch.cuda"],
+    "checkpoint": "epoch_25",
+    "test_images": 211,
+    "shared_split": true,
+    "results": [
+      {"seed": 42, "test_miou": 0.6702, "pixel_accuracy": 0.9597},
+      {"seed": 123, "test_miou": 0.6342, "pixel_accuracy": 0.9592},
+      {"seed": 777, "test_miou": 0.6465, "pixel_accuracy": 0.9578}
+    ],
+    "mean_pm_std": {
+      "test_miou": [0.6503, 0.0183],
+      "pixel_accuracy": [0.9589, 0.0010]
+    }
+  },
+  "main_table_erp_cbam": {
+    "accuracy": 0.955,
+    "miou": 0.662,
+    "precision": 0.773,
+    "recall": 0.758,
+    "f1": 0.726,
+    "dice": 0.831,
+    "specificity": 0.983,
+    "balanced_accuracy": 0.870,
+    "mcc": 0.716
+  },
+  "deeplabv3plus_baseline_miou": 0.536,
+  "relative_miou_gain_pct": 23.5,
+  "compute_1440x736_bs1": {
+    "erp_cbam": {"params_M": 22.45, "gflops": 255.4, "peak_mem_MB": 861, "latency_ms": 12.64, "fps": 79.1},
+    "deeplabv3plus": {"params_M": 22.44, "gflops": 255.3, "peak_mem_MB": 774, "latency_ms": 11.53, "fps": 86.8}
+  }
+}

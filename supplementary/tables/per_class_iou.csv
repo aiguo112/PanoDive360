@@ -1,0 +1,12 @@
+class,iou,precision,instances,notes
+Background,0.958,0.982,1025,water column and unlabelled
+Diver,0.741,0.856,1010,most frequent foreground
+Shark,0.838,0.909,310,large predatory fish
+Fish,0.499,0.625,267,small extent high variability
+Sea Turtle,0.845,0.875,41,rarest well-defined class
+Dolphin,0.107,0.335,27,extreme rarity
+Sea Lion,0.779,0.901,68,coastal/rocky reef
+Coral,0.561,0.787,96,reef-building organisms
+Shipwreck,0.790,0.879,275,anthropogenic structure
+Seaweed,0.606,0.703,323,irregular macroalgae
+Rock,0.564,0.662,272,benthic substrate

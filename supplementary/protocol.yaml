@@ -1,0 +1,89 @@
+# Paper protocol for PanoDive360 / ERP-CBAM
+# Matches Chapter 3 of the dissertation and the ACM MMAsia 2026 experiments.
+# Use this file, not the default square crop in panodive360/config.py.
+
+task: underwater_erp_semantic_segmentation
+dataset: PanoDive360
+n_frames_annotated: 1052
+n_source_videos: 30
+n_classes: 11
+projection: monoscopic_ERP
+aspect_ratio: "2:1"
+
+splits:
+  strategy: stratified_70_20_10
+  train_after_augmentation: 1472
+  val: 421
+  test: 211
+  note: >
+    Augmentation is applied only to the training partition.
+    The three-seed study uses this same split (seed robustness, not split variance).
+
+augmentation:
+  train_only: [horizontal_flip, vertical_flip, rotate_90]
+  excluded: [color_jitter, photometric, crop]
+  reason: preserve underwater colour statistics and full ERP field of view
+
+input:
+  train_eval_resolution: [1440, 720]   # width, height; 2:1 ERP, no crop
+  video_padded_resolution: [1440, 736] # multiple of 32 for ResNet-34 stride
+  github_config_py_currently: [1024, 1024]
+  warning: >
+    panodive360/config.py currently sets input_size = (1024, 1024).
+    That square resize does not match the paper. For paper numbers use 1440x720.
+
+software:
+  python: "3.8.19"
+  pytorch: "1.8.0"
+  cuda: "11.1"
+  cudnn: "8902"
+
+hardware:
+  training: "2x NVIDIA GeForce RTX 3060 12GB, DataParallel / DDP"
+  fps_measurement: "NVIDIA RTX 5070 Ti, batch=1, 20 warmup + 100 timed, CUDA sync"
+
+optimization:
+  backbone: ResNet-34 ImageNet
+  host: DeepLabv3+
+  optimizer: Adam
+  betas: [0.9, 0.999]
+  learning_rate: 1.0e-4
+  batch_size: 4
+  epochs: 25
+  early_stopping_patience: 5
+  lr_scheduler: ReduceLROnPlateau
+  lr_factor: 0.5
+  lr_patience: 3
+  loss: CE + Dice
+  dice_smooth: 1
+
+erp_cbam:
+  insertions: [after_encoder, after_ASPP]
+  extra_parameters: 2   # alpha0, beta0
+  alpha0_init: 1.0
+  beta0_init: 0.0
+  latitude_weight: "alpha * cos(phi) + beta"
+
+seeds:
+  main_table: 42
+  robustness: [42, 123, 777]
+  generators: [python_random, numpy, torch_cpu, torch_cuda]
+  cudnn_deterministic: true
+  three_seed_checkpoint: epoch_25
+  three_seed_note: >
+    Python, NumPy, and PyTorch (CPU and CUDA) were seeded consistently.
+    The epoch-25 checkpoint was evaluated on the same 211-image test set.
+    These runs share one train/val/test split: they probe seed robustness,
+    not split variance.
+
+primary_metrics: [mIoU, balanced_accuracy]
+reported_metrics:
+  - accuracy
+  - mIoU
+  - precision
+  - recall
+  - f1
+  - dice
+  - specificity
+  - balanced_accuracy
+  - mcc

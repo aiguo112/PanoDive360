@@ -1,0 +1,25 @@
+hyperparameter,value
+number_of_classes,11
+batch_size,4
+optimizer,Adam
+learning_rate,1e-4
+adam_beta1,0.9
+adam_beta2,0.999
+loss,CE+Dice
+epochs,25
+early_stopping_patience,5
+lr_scheduler,ReduceLROnPlateau
+lr_factor,0.5
+lr_patience,3
+input_resolution,1440x720
+video_padded_resolution,1440x736
+train_val_test,1472/421/211
+gpus_train,2x RTX 3060 12GB
+gpu_fps,RTX 5070 Ti
+python,3.8.19
+pytorch,1.8.0
+cuda,11.1
+cudnn,8902
+backbone,ResNet-34 ImageNet
+main_seed,42
+robustness_seeds,"42,123,777"

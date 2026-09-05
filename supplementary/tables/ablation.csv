@@ -1,0 +1,7 @@
+variant,channel_attention,spatial_attention,latitude,aspp,accuracy,miou,recall,f1,dice,balanced_accuracy,mcc
+DeepLabv3+_baseline,0,0,0,1,0.947,0.536,0.680,0.655,0.655,0.830,0.726
+Baseline_plus_CBAM,1,1,0,1,0.920,0.409,0.544,0.543,0.824,0.752,0.525
+ERP-CBAM_wo_ERP,1,0,0,1,0.956,0.635,0.705,0.751,0.907,0.839,0.737
+ERP-CBAM_wo_Lat,1,1,0,1,0.959,0.637,0.723,0.750,0.908,0.851,0.737
+ERP-CBAM_wo_CA,0,1,1,1,0.951,0.569,0.652,0.690,0.896,0.815,0.690
+ERP-CBAM_full,1,1,1,1,0.955,0.662,0.758,0.726,0.831,0.870,0.716
