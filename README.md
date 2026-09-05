@@ -27,7 +27,8 @@ PanoDive360/
 │   ├── raw/
 │   └── splits/{train,valid,test}/{images,masks}/
 ├── assets/360-ERP_417.jpg   # README teaser
-└── docs/diagrams/           # architecture diagram scripts
+├── docs/diagrams/           # architecture diagram scripts
+└── supplementary/           # ACM MMAsia extra protocol, seeds, graphs
 ```
 
 ## Dataset (main contribution)
@@ -73,6 +74,14 @@ python preprocess/resize_images.py
 ```
 
 Edit the placeholder paths at the bottom of each script before running them.
+
+## Supplementary material
+
+Protocol, random seeds, and extra graphs for the ACM Multimedia Asia 2026 paper: [supplementary/PanoDive360_supplementary.pdf](supplementary/PanoDive360_supplementary.pdf)
+
+- Seeds: 42 (main table), 123, 777 (robustness)
+- Three-seed test mIoU: 0.6503 ± 0.0183
+- Paper resolution: 1440×720 ERP
 
 ## License
 
