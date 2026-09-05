@@ -236,7 +236,7 @@ def build():
         topMargin=22 * mm,
         bottomMargin=18 * mm,
         title="Supplementary Material: PanoDive360",
-        author="Ghulam Arbi, Lu Zhang, Yanyong Zhang",
+        author="Anonymous",
     )
     story = []
     usable = A4[0] - 36 * mm
@@ -251,8 +251,7 @@ def build():
     )
     story.append(
         Paragraph(
-            "Ghulam Arbi, Lu Zhang, and Yanyong Zhang<br/>"
-            "University of Science and Technology of China<br/>"
+            "Anonymous authors<br/>"
             "ACM Multimedia Asia 2026",
             s["meta"],
         )
@@ -263,10 +262,7 @@ def build():
             "experiments that do not fit in the 6-page ACM main paper: random-seed "
             "robustness (seeds 42, 123, 777), training/validation curves, and ERP "
             "video-inference cost. All numbers and graphs match the PanoDive360 "
-            "chapter. Upload this folder to "
-            "<font color='blue'><u>https://github.com/aiguo112/PanoDive360</u></font> "
-            "as <font face='Courier'>supplementary/</font>. "
-            "For CMT double-blind review, strip the author block before uploading the PDF.",
+            "paper. No author-identifying links are included.",
             s["body"],
         )
     )
@@ -599,19 +595,6 @@ def build():
             s,
             "Figure S8. Class instance distribution. Diver dominates (1,010); "
             "dolphin (27) and sea turtle (41) are rare.",
-        )
-    )
-
-    story.append(Paragraph("8. What to upload", s["h1"]))
-    story.append(
-        Paragraph(
-            "Copy this entire folder to the PanoDive360 repository as "
-            "<font face='Courier'>supplementary/</font>. Optionally paste the short "
-            "section in README_GITHUB_SNIPPET.md into the root README. "
-            "If MMAsia review is still double-blind, do not put the GitHub URL in the "
-            "submitted PDF; upload only PanoDive360_supplementary.pdf to CMT with the "
-            "author block removed.",
-            s["body"],
         )
     )
 

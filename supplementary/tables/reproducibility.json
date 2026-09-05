@@ -1,7 +1,6 @@
 {
   "paper": "PanoDive360: A Novel Equirectangular Projection Dataset and Enhanced Attention Mechanism for Underwater 360-Degree Multiclass Semantic Segmentation",
   "venue": "ACM Multimedia Asia 2026",
-  "code": "https://github.com/aiguo112/PanoDive360",
   "seeds": {
     "main_table": 42,
     "robustness": [42, 123, 777],

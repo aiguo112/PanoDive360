@@ -27,7 +27,7 @@ augmentation:
 input:
   train_eval_resolution: [1440, 720]   # width, height; 2:1 ERP, no crop
   video_padded_resolution: [1440, 736] # multiple of 32 for ResNet-34 stride
-  github_config_py_currently: [1024, 1024]
+  released_config_py_currently: [1024, 1024]
   warning: >
     panodive360/config.py currently sets input_size = (1024, 1024).
     That square resize does not match the paper. For paper numbers use 1440x720.
