@@ -236,7 +236,7 @@ def build():
         topMargin=22 * mm,
         bottomMargin=18 * mm,
         title="Supplementary Material: PanoDive360",
-        author="Anonymous",
+        author="",
     )
     story = []
     usable = A4[0] - 36 * mm
@@ -251,7 +251,6 @@ def build():
     )
     story.append(
         Paragraph(
-            "Anonymous authors<br/>"
             "ACM Multimedia Asia 2026",
             s["meta"],
         )
